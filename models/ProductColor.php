@@ -4,13 +4,32 @@
 namespace app\models;
 
 
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\SluggableBehavior;
 use yii\db\ActiveRecord;
+use  yii\helpers\Inflector;
 
 class ProductColor extends ActiveRecord
 {
     private $product_id;
     private $color;
     private $price;
+
+
+
+
+    public function behaviors()
+    {
+        return [
+            BlameableBehavior::className(),
+            [
+                'class' => SluggableBehavior::className(),
+                'attribute'=>'color',
+            ],
+
+
+        ];
+    }
 
     public static function tableName()
     {
@@ -39,5 +58,6 @@ class ProductColor extends ActiveRecord
     {
         return $this->hasOne(Product::className(),['id'=>'product_id']);
     }
+
 
 }

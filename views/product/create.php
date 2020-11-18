@@ -22,7 +22,6 @@ $this->title = 'Add Product';
     ['prompt'=>'Select Category',]) ?>
 <?= $form->field($model, 'description')->textarea() ?>
 <?= $form->field($model, 'image')->fileInput() ?>
-<?= $form->field($model, 'created_at')->input('date') ?>
 
 
     <div class="form-group">

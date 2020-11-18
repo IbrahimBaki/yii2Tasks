@@ -7,11 +7,15 @@ namespace app\controllers;
     use app\models\Product;
     use app\models\ProductColor;
     use Yii;
+    use yii\data\ActiveDataProvider;
+    use yii\grid\GridView;
     use yii\web\Controller;
     use yii\web\NotFoundHttpException;
     use yii\web\UploadedFile;
+    use yii\widgets\DetailView;
+    use yii\widgets\ListView;
 
-class ProductColorController extends Controller
+    class ProductColorController extends Controller
 {
 
 

@@ -33,16 +33,16 @@ class Category extends ActiveRecord
             'image'=>'Category Image',
         ];
     }
-//
-//    public function upload()
-//    {
-//        if ($this->validate()) {
-//            $this->image-> saveAs('@app/web/uploads/'.$this->image->baseName. '.' . $this->image->extension);
-//            return true;
-//        }else{
-//            return false;
-//        }
-//
-//    }
+
+    public function upload()
+    {
+        if ($this->validate()) {
+            $this->image-> saveAs('@app/web/uploads/'.$this->image->baseName. '.' . $this->image->extension);
+            return true;
+        }else{
+            return false;
+        }
+
+    }
 
 }
