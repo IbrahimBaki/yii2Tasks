@@ -1,32 +1,20 @@
 <?php
 
-use app\models\Category;
-use app\models\Product;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-/** @var  $form yii\widgets\ActiveForm */
-/** @var $this yii\web\View */
-/** @var  $model app\models\ProductColor */
-$this->title = 'Add Product';
+
+/* @var $this yii\web\View */
+/* @var $model app\models\ProductColor */
+
+$this->title = 'Create Product Color';
+$this->params['breadcrumbs'][] = ['label' => 'Product Colors', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $form = ActiveForm::begin([
-    'id' => 'product-color-form',
-    'options' => [
-            'class' => 'form-horizontal',
-        'enctype' => 'multipart/form-data'
-    ],
-]); ?>
-<?= $form->field($model, 'product_id')->dropDownList(
-        ArrayHelper::map(Product::find()->all(),'id','title'),
-    ['prompt'=>'Select Product',]) ?>
-<?= $form->field($model, 'color')->textInput() ?>
-<?= $form->field($model, 'price')->textInput() ?>
+<div class="product-color-create">
 
+    <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="form-group">
-        <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Create', ['class' => 'btn btn-primary']) ?>
-        </div>
-    </div>
-<?php ActiveForm::end() ?>
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
+
+</div>

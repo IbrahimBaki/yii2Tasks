@@ -1,46 +1,56 @@
 <?php
+
 use yii\helpers\Html;
+use yii\grid\GridView;
+
+/* @var $this yii\web\View */
+/* @var $searchModel app\models\ProductSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Products';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="body-content">
-    <div class="form-group">
-        <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::a('Create',['/product/create'] ,['class' => 'btn btn-primary']) ?>
-        </div>
-    </div>
-    <div class="row">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Title</th>
-                <th scope="col">parent Category</th>
-                <th scope="col">Description</th>
-                <th scope="col">Image</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php if(count($products)>0): ?>
-            <?php foreach ($products as $product): ?>
-                <?php $parentName = $product->category ?>
-            <tr class="table-active">
-                <th scope="row"><?= $product->id ?></th>
-                <td><?= $product->title ?></td>
-                <td><?= $parentName->title ?></td>
-                <td><?= $product->description ?></td>
-                <td><?= Html::img('@web/uploads/'. $product->image,['style'=>'width:50px;height:50px']);?></td>
-                <td>
-                    <span><?= Html::a('Edit',['product/update?id=' .$product->id ]) ?></span>
-                    <span><?= Html::a('Delete',['product/delete?id=' .$product->id ]) ?></span>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-            <?php else: ?>
-            <tr>
-                <td>No Records Found</td>
-            </tr>
-            <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
+<div class="product-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'title',
+           // 'category_id',
+            [
+                'attribute'=>'category_id',
+                'value'=>function($data){
+                    return $data->category->title;
+                }
+            ],
+            'description',
+            //'image',
+            [
+                 'attribute'=>'image',
+                 'format'=>'html',
+                'label'=>'Image',
+                'value'=>function($data){
+                    return Html::img('@web/uploads/'. $data->image ,['width'=>'60px']);
+                }
+            ],
+            //'created_at',
+            //'updated_at',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+
 </div>

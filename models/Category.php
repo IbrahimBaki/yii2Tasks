@@ -1,48 +1,75 @@
 <?php
 
-
 namespace app\models;
 
+use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\web\UploadedFile;
-use yii\db\ActiveRecord;
 
-class Category extends ActiveRecord
+
+/**
+ * This is the model class for table "category".
+ *
+ * @property int $id
+ * @property string|null $title
+ * @property string|null $description
+ * @property string|null $image
+ *
+ * @property Product[] $products
+ */
+class Category extends \yii\db\ActiveRecord
 {
-    private $title;
-    private $description;
-    private $image;
-
+    /**
+     * {@inheritdoc}
+     */
     public static function tableName()
     {
-        return '{{%category}}';
-        
+        return 'category';
     }
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['title','description'],'required'],
-            [['image'],'file','extensions'=>'png,jpg,jpeg']
+            [['title'], 'string', 'max' => 50],
+            [['description'], 'string', 'max' => 255],
+            [['image'],'file','skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
+            [['title'], 'unique'],
         ];
-
     }
+
+    /**
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [
-            'title' => 'Category Name',
-            'description'=>'Category description',
-            'image'=>'Category Image',
+            'id' => 'ID',
+            'title' => 'Title',
+            'description' => 'Description',
+            'image' => 'Image',
         ];
     }
 
     public function upload()
     {
         if ($this->validate()) {
-            $this->image-> saveAs('@app/web/uploads/'.$this->image->baseName. '.' . $this->image->extension);
+            $this->image->saveAs('uploads/' . $this->image->baseName . '.' . $this->image->extension);
             return true;
-        }else{
+        } else {
             return false;
         }
-
     }
 
+    /**
+     * Gets query for [[Products]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProducts()
+    {
+        return $this->hasMany(Product::className(), ['category_id' => 'id']);
+    }
 }

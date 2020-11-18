@@ -1,28 +1,21 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-/** @var  $form yii\widgets\ActiveForm */
-/** @var $this yii\web\View */
-/** @var  $model app\models\Category */
-$this->title = 'Update Category';
+
+/* @var $this yii\web\View */
+/* @var $model app\models\Product */
+
+$this->title = 'Update Product: ' . $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Update';
 ?>
-<?php $form = ActiveForm::begin([
-    'id' => 'category-form',
-    'options' => [
-            'class' => 'form-horizontal',
-        'enctype' => 'multipart/form-data'
-    ],
-]); ?>
-<?= $form->field($model, 'title')->textInput() ?>
-<?= $form->field($model, 'description') ?>
-<?= $form->field($model, 'image')->fileInput() ?>
-<?= Html::img('@web/uploads/'. $model->image,['style'=>'width:100px;height:100px']);?>
+<div class="product-update">
 
+    <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="form-group">
-        <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>
-        </div>
-    </div>
-<?php ActiveForm::end() ?>
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
+
+</div>

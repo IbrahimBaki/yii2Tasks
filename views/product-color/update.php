@@ -1,31 +1,21 @@
 <?php
 
-use app\models\Product;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-/** @var  $form yii\widgets\ActiveForm */
-/** @var $this yii\web\View */
-/** @var  $model app\models\Category */
-$this->title = 'Update product Color';
+
+/* @var $this yii\web\View */
+/* @var $model app\models\ProductColor */
+
+$this->title = 'Update Product Color: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Product Colors', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Update';
 ?>
-<?php $form = ActiveForm::begin([
-    'id' => 'category-form',
-    'options' => [
-            'class' => 'form-horizontal',
-        'enctype' => 'multipart/form-data'
-    ],
-]); ?>
-<?= $form->field($model, 'product_id')->dropDownList(
-    ArrayHelper::map(Product::find()->all(),'id','title'),
-    ['prompt'=>'Select Product',]) ?>
-<?= $form->field($model, 'color')->textInput() ?>
-<?= $form->field($model, 'price')->textInput() ?>
+<div class="product-color-update">
 
+    <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="form-group">
-        <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>
-        </div>
-    </div>
-<?php ActiveForm::end() ?>
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
+
+</div>

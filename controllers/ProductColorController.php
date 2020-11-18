@@ -2,80 +2,126 @@
 
 namespace app\controllers;
 
+use Yii;
+use app\models\ProductColor;
+use app\models\ProductColorSearch;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
-    use app\models\Category;
-    use app\models\Product;
-    use app\models\ProductColor;
-    use Yii;
-    use yii\data\ActiveDataProvider;
-    use yii\grid\GridView;
-    use yii\web\Controller;
-    use yii\web\NotFoundHttpException;
-    use yii\web\UploadedFile;
-    use yii\widgets\DetailView;
-    use yii\widgets\ListView;
-
-    class ProductColorController extends Controller
+/**
+ * ProductColorController implements the CRUD actions for ProductColor model.
+ */
+class ProductColorController extends Controller
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
 
-
+    /**
+     * Lists all ProductColor models.
+     * @return mixed
+     */
     public function actionIndex()
     {
-        $colors = ProductColor ::find() -> all();
-        return $this -> render('index', [
-            'colors' => $colors
+        $searchModel = new ProductColorSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
+    /**
+     * Displays a single ProductColor model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new ProductColor model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
     public function actionCreate()
     {
-        $products = Product::find() -> all();
-        $color = new ProductColor();
-        if ($color -> load(Yii::$app -> request -> post())) {
-            if ($color -> save()) {
-                Yii::$app -> getSession() -> setFlash('message', 'Product options Saved Successfully');
-                return $this -> redirect(['index']);
-            } else {
-                Yii::$app -> getSession() -> setFlash('message', 'Failed to save options');
-            }
-        } else {
-            return $this -> render('create', [
-                'model' => $color,
-                'products' => $products
+        $model = new ProductColor();
 
-            ]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
+    /**
+     * Updates an existing ProductColor model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionUpdate($id)
     {
-        $color = ProductColor ::findOne($id);
-        if ($color -> load(Yii::$app -> request -> post())) {
-            if ($color -> save()) {
-                Yii::$app -> getSession() -> setFlash('message', 'color Updated Successfully');
-                return $this -> redirect(['index']);
-            } else {
-                Yii::$app -> getSession() -> setFlash('message', 'Failed to Update color');
-            }
-        } else {
-            return $this -> render('update', [
-                'model' => $color,
+        $model = $this->findModel($id);
 
-            ]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
+    /**
+     * Deletes an existing ProductColor model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionDelete($id)
     {
-        $color = ProductColor ::findOne($id);
-        if ($color === null)
-            throw new NotFoundHttpException('Category Not Exists');
-        $color -> delete();
-        return $this -> redirect(['index']);
+        $this->findModel($id)->delete();
 
+        return $this->redirect(['index']);
     }
 
-}
+    /**
+     * Finds the ProductColor model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return ProductColor the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = ProductColor::findOne($id)) !== null) {
+            return $model;
+        }
 
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+}

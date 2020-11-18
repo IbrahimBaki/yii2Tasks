@@ -1,32 +1,20 @@
 <?php
 
-use app\models\Category;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-/** @var  $form yii\widgets\ActiveForm */
-/** @var $this yii\web\View */
-/** @var  $model app\models\Product */
-$this->title = 'Add Product';
+
+/* @var $this yii\web\View */
+/* @var $model app\models\Product */
+
+$this->title = 'Create Product';
+$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $form = ActiveForm::begin([
-    'id' => 'product-form',
-    'options' => [
-            'class' => 'form-horizontal',
-        'enctype' => 'multipart/form-data'
-    ],
-]); ?>
-<?= $form->field($model, 'title')->textInput() ?>
-<?= $form->field($model, 'category_id')->dropDownList(
-        ArrayHelper::map(Category::find()->all(),'id','title'),
-    ['prompt'=>'Select Category',]) ?>
-<?= $form->field($model, 'description')->textarea() ?>
-<?= $form->field($model, 'image')->fileInput() ?>
+<div class="product-create">
 
+    <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="form-group">
-        <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Create', ['class' => 'btn btn-primary']) ?>
-        </div>
-    </div>
-<?php ActiveForm::end() ?>
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
+
+</div>

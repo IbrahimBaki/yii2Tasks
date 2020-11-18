@@ -1,43 +1,47 @@
 <?php
+
 use yii\helpers\Html;
+use yii\grid\GridView;
+
+/* @var $this yii\web\View */
+/* @var $searchModel app\models\CategorySearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Categories';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="body-content">
-    <div class="form-group">
-        <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::a('Create',['/category/create'] ,['class' => 'btn btn-primary']) ?>
-        </div>
-    </div>
-    <div class="row">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Title</th>
-                <th scope="col">Description</th>
-                <th scope="col">Image</th>
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php if(count($categories)>0): ?>
-            <?php foreach ($categories as $category): ?>
-            <tr class="table-active">
-                <th scope="row"><?= $category->id ?></th>
-                <td><?= $category->title ?></td>
-                <td><?= $category->description ?></td>
-                <td><?= Html::img('@web/uploads/'. $category->image,['style'=>'width:50px;height:50px']);?></td>
-                <td>
-                    <span><?= Html::a('Edit',['category/update?id=' .$category->id ]) ?></span>
-                    <span><?= Html::a('Delete',['category/delete?id=' .$category->id ]) ?></span>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-            <?php else: ?>
-            <tr>
-                <td>No Records Found</td>
-            </tr>
-            <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
+<div class="category-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a('Create Category', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
+<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'title',
+            'description',
+//            'image',
+            [
+                    'attribute'=>'image',
+                'format'=>'html',
+                'label'=>'Image',
+                'value'=>function($data){
+                    return Html::img('@web/uploads/'. $data->image , ['width'=>'60px']);
+                }
+            ],
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+
 </div>

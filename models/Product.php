@@ -1,62 +1,99 @@
 <?php
 
-
 namespace app\models;
 
-
+use Yii;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 
-class Product extends ActiveRecord
+/**
+ * This is the model class for table "product".
+ *
+ * @property int $id
+ * @property string|null $title
+ * @property int|null $category_id
+ * @property string|null $description
+ * @property string|null $image
+ * @property int|null $created_at
+ * @property int|null $updated_at
+ *
+ * @property Category $category
+ * @property ProductColor[] $productColors
+ */
+class Product extends \yii\db\ActiveRecord
 {
 
     public function behaviors()
     {
         return [
-          TimestampBehavior::className(),
+            TimestampBehavior::className(),
         ];
 
     }
 
-   private $title;
-   private $category_id;
-   private $description;
-   private $image;
-   private $created_at;
-
+    /**
+     * {@inheritdoc}
+     */
     public static function tableName()
     {
-        return '{{%product}}';
-   }
+        return 'product';
+    }
 
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['title','category_id','description','image'],'required'],
-            [['image'],'file','extensions'=>'png,jpg,jpeg']
+            [['category_id'], 'integer'],
+            [['title'], 'string', 'max' => 100],
+            [['description'], 'string', 'max' => 1000],
+            [['image'],'file','skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
     public function attributeLabels()
     {
         return [
-            'title' => 'Product Name',
+            'id' => 'ID',
+            'title' => 'Title',
             'category_id' => 'Parent Category',
-            'description'=>'Product description',
-            'image'=>'Product Image',
-            'created_at'=>'Product created date',
-
+            'description' => 'Description',
+            'image' => 'Image',
         ];
     }
 
+    public function upload()
+    {
+        if($this->validate()){
+            $this->image->saveAs('uploads/'. $this->image->baseName . '.' . $this->image->extension);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * Gets query for [[Category]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
     public function getCategory()
     {
-        return $this->hasOne(Category::className(),['id'=>'category_id']);
-        
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
-    public function getColor()
+    /**
+     * Gets query for [[ProductColors]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductColors()
     {
-        return $this->hasMany(ProductColor::className(),['product_id'=>'id']);
+        return $this->hasMany(ProductColor::className(), ['product_id' => 'id']);
     }
-
 }

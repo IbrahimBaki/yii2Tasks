@@ -1,82 +1,138 @@
 <?php
 
-
 namespace app\controllers;
 
-use app\models\Category;
 use Yii;
+use app\models\Category;
+use app\models\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 
+/**
+ * CategoryController implements the CRUD actions for Category model.
+ */
 class CategoryController extends Controller
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Lists all Category models.
+     * @return mixed
+     */
     public function actionIndex()
     {
-        $categories = Category::find()->all();
-        return $this->render('index', [
-            'categories'=>$categories,
-        ]);
+        $searchModel = new CategorySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
+    /**
+     * Displays a single Category model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new Category model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
     public function actionCreate()
     {
+        $model = new Category();
 
-        $category = new Category();
-        if ($category->load(Yii::$app->request->post())) {
-            $category->image = UploadedFile::getInstance($category,'image');
-            if ($category->save()) {
-                $category->image->saveAs('uploads/' . $category->image->baseName . '.' . $category->image->extension);
-                Yii::$app->getSession()->setFlash('message', 'Category Created Successfully');
-                return $this->redirect(['index']);
-            } else {
-                Yii::$app->getSession()->setFlash('message', 'Failed to create Category');
+        if ($model->load(Yii::$app->request->post())) {
+            $model->image = UploadedFile::getInstance($model, 'image');
+            if($model->save()){
+                $model->upload();
+                return $this->redirect(['view', 'id' => $model->id]);
             }
-        } else {
-            return $this->render('create', [
-                'model' => $category,
 
-            ]);
         }
 
-
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
+    /**
+     * Updates an existing Category model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionUpdate($id)
     {
-        $category = Category::findOne($id);
+        $model = $this->findModel($id);
 
-        if ($category->load(Yii::$app->request->post())) {
-            $category->image = UploadedFile::getInstance($category,'image');
-            if ($category->save()) {
-                $category->image->saveAs('uploads/' . $category->image->baseName . '.' . $category->image->extension);
-                Yii::$app->getSession()->setFlash('message', 'Category Created Successfully');
-                return $this->redirect(['index']);
-            } else {
-                Yii::$app->getSession()->setFlash('message', 'Failed to create Category');
+        if ($model->load(Yii::$app->request->post())) {
+            $model->image = UploadedFile::getInstance($model, 'image');
+            if($model->save()){
+                $model->upload();
+                return $this->redirect(['view', 'id' => $model->id]);
             }
-        } else {
-            return $this->render('update', [
-                'model' => $category,
 
-            ]);
         }
 
-
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
+    /**
+     * Deletes an existing Category model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
     public function actionDelete($id)
     {
-        $category = Category::findOne($id);
-        if($category === null)
-            throw new NotFoundHttpException('Category Not Exists');
-        $filepath='uploads/'. $category->image;
-        unlink($filepath);
-        $category->delete();
+        $this->findModel($id)->delete();
+
         return $this->redirect(['index']);
-
-
     }
 
+    /**
+     * Finds the Category model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Category the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Category::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
 }
