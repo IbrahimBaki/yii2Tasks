@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\NewUser;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -124,5 +125,22 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+    public function actionRegister()
+    {
+        $model = new NewUser();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                // form inputs are valid, do something here
+                $model->store();
+                if($model->save()){
+                    return $this->redirect(['login']);
+                }
+            }
+        }
+        return $this->render('register', [
+            'model' => $model,
+        ]);
     }
 }

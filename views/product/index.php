@@ -1,5 +1,7 @@
 <?php
 
+use app\models\Category;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -28,15 +30,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'title',
-           // 'category_id',
             [
                 'attribute'=>'category_id',
                 'value'=>function($data){
                     return $data->category->title;
-                }
+                },
+                'filter'=>ArrayHelper::map(Category::find()->all(), 'id', 'title'),
             ],
             'description',
-            //'image',
             [
                  'attribute'=>'image',
                  'format'=>'html',

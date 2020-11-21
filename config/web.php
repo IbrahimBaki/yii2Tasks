@@ -21,7 +21,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\models\NewUser',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -32,7 +32,15 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'transport'=>[
+                'class'=>'Swift_SmtpTransport',
+                'host'=>'smtp.mailtrap.io',
+                'username'=>'ef33cea4c17f22',
+                'password'=>'e2a67b49353bb2',
+                'port'=>'2525',
+                'encryption'=>'tls',
+            ],
+            'useFileTransport' => false,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

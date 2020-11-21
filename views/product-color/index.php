@@ -1,5 +1,7 @@
 <?php
 
+use app\models\Product;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -32,7 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
                'attribute'=>'product_id',
                'value'=>function($data){
                     return $data->product->title;
-               }
+               },
+                'filter'=>ArrayHelper::map(Product::find()->all(), 'id', 'title'),
             ],
             'color',
             'price',
