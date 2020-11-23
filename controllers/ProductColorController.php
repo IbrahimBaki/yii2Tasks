@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Product;
 use Yii;
 use app\models\ProductColor;
 use app\models\ProductColorSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,13 +67,15 @@ class ProductColorController extends Controller
     public function actionCreate()
     {
         $model = new ProductColor();
-
+        $products = Product::find()->all();
+        $prdList = ArrayHelper::map($products,'id','title');
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'prdList' => $prdList,
         ]);
     }
 
@@ -85,13 +89,15 @@ class ProductColorController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $products = Product::find()->all();
+        $prdList = ArrayHelper::map($products,'id','title');
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'prdList' => $prdList,
         ]);
     }
 

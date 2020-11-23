@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use kartik\detail\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
@@ -16,50 +16,51 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+<!--        --><?php //Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+<!--        --><?php //Html::a('Delete', ['delete', 'id' => $model->id], [
+//            'class' => 'btn btn-danger',
+//            'data' => [
+//                'confirm' => 'Are you sure you want to delete this item?',
+//                'method' => 'post',
+//            ],
+//        ]) ?>
     </p>
-
     <?= DetailView::widget([
         'model' => $model,
+        'condensed'=>true,
+        'hover'=>true,
+        'mode'=>DetailView::MODE_VIEW,
+        //'bootstrap'=>true,
+        'bordered'=>true,
+        'panel'=>[
+            'heading'=>'Product # ' . $model->id,
+            'type'=>DetailView::TYPE_INFO,
+        ],
         'attributes' => [
             'id',
             'title',
             [
                 'attribute'=>'category_id',
-                'value'=>function($data){
-                    return $data->category->title;
-                }
+                'value'=> $model->category->title,
+
             ],
             'description',
-            //'image',
             [
                 'attribute'=>'image',
                 'format'=>'html',
                 'label'=>'Image',
-                'value'=>function($data){
-                    return Html::img('@web/uploads/'. $data->image ,['width'=>'60px']);
-                }
+                'value'=> Html::img('@web/uploads/'. $model->image ,['width'=>'60px']),
+
             ],
-            //'created_at',
             [
                 'attribute'=>'created_at',
-                'value'=>function($data){
-                    return date('Y-m-d',$data->created_at);
-                }
+                'value'=> date('Y-m-d',$model->created_at),
+
             ],
-            //'updated_at',
             [
                 'attribute'=>'updated_at',
-                'value'=>function($data){
-                    return date('Y-m-d',$data->updated_at);
-                }
+                'value'=> date('Y-m-d',$model->updated_at),
+
             ],
         ],
     ]) ?>

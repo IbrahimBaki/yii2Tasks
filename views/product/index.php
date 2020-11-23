@@ -3,7 +3,7 @@
 use app\models\Category;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProductSearch */
@@ -43,14 +43,20 @@ $this->params['breadcrumbs'][] = $this->title;
                  'format'=>'html',
                 'label'=>'Image',
                 'value'=>function($data){
-                    return Html::img('@web/uploads/'. $data->image ,['width'=>'60px']);
+                    return Html::img('@web/uploads/'. $data->image ,['width'=>'60px','height'=>'60px']);
                 }
             ],
-            //'created_at',
-            //'updated_at',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
+        'pjax' => true,
+        'pjaxSettings' => [
+            //  'loadingCssClass'=>true,
+            'beforeGrid' => 'My fancy content before.',
+            'afterGrid' => 'My fancy content after.',
+        ],
+        'floatHeader' => true,
+        'floatHeaderOptions' => ['top' => '50'],
+        'showPageSummary' => true,
     ]); ?>
 
 

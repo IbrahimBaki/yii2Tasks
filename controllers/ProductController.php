@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Category;
 use Yii;
 use app\models\Product;
 use app\models\ProductSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -66,7 +68,8 @@ class ProductController extends Controller
     public function actionCreate()
     {
         $model = new Product();
-
+        $categories = Category::find()->all();
+        $catList = ArrayHelper::map($categories,'id','title');
         if ($model->load(Yii::$app->request->post()) ) {
             $model->image = UploadedFile::getInstance($model , 'image');
             if($model->save()){
@@ -76,6 +79,7 @@ class ProductController extends Controller
         }
         return $this->render('create', [
             'model' => $model,
+            'catList' => $catList,
         ]);
     }
 
@@ -89,7 +93,8 @@ class ProductController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $categories = Category::find()->all();
+        $catList = ArrayHelper::map($categories,'id','title');
         if ($model->load(Yii::$app->request->post())){
             $model->image = UploadedFile::getInstance($model , 'image');
             if($model->save()){
@@ -99,6 +104,7 @@ class ProductController extends Controller
         }
         return $this->render('update', [
             'model' => $model,
+            'catList' => $catList,
         ]);
     }
 

@@ -1,12 +1,15 @@
 <?php
 
 use app\models\Category;
+use kartik\select2\Select2;
+use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
+/* @var $catList app\models\Category */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -15,10 +18,41 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'category_id')->dropDownList(
-        ArrayHelper::map(Category::find()->all(),'id','title'),
-        ['prompt'=>'Select Category',]) ?>
+<?php /*
+    Modal::begin([
+    'options' => [
+    'id' => 'kartik-modal',
+    'tabindex' => false // important for Select2 to work properly
+    ],
+//    'title' => 'Select2 Inside Modal',
+    'toggleButton' => ['label' => 'Select Category', 'class' => 'btn btn-lg btn-primary'],
+    ]);
+    echo Select2::widget([
+    'name' => 'state_40',
+    'data' => $catList,
+    'options' => ['placeholder' => 'Select Category ...'],
+    'pluginOptions' => [
+    'allowClear' => true
+    ],
+    ]);
+    Modal::end();
+ */
+    ?>
+    <?= $form->field($model,'category_id')->widget(Select2::classname(),[
+            'data'=>$catList,
+            'hideSearch'=>true,
+            'theme' => Select2::THEME_KRAJEE,
+            'size'=>Select2::LARGE,
+            'options' => [
+                    'placeholder' => 'Select a Category ...',
+                'options'=>[
+                        3=>['disabled'=>true]
+                ]
+                ],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]) ?>
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 

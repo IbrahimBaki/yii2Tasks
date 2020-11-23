@@ -126,10 +126,11 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+
     public function actionRegister()
     {
         $model = new NewUser();
-
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                 // form inputs are valid, do something here

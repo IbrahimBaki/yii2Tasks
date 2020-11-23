@@ -3,8 +3,7 @@
 use app\models\Product;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\grid\GridView;
-
+use kartik\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProductColorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -39,12 +38,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'color',
             'price',
-           // 'created_by',
-            //'updated_by',
-            //'slug',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
+        'pjax' => true,
+        'pjaxSettings' => [
+            //  'loadingCssClass'=>true,
+            'beforeGrid' => 'My fancy content before.',
+            'afterGrid' => 'My fancy content after.',
+        ],
+        'floatHeader' => true,
+        'floatHeaderOptions' => ['top' => '50'],
     ]); ?>
 
 
