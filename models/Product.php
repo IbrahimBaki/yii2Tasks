@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\validators\EmailValidator;
 
 /**
  * This is the model class for table "product".
@@ -47,6 +48,7 @@ class Product extends \yii\db\ActiveRecord
         return [
 //            [['category_id'], 'integer'],
             [['title'], 'string', 'max' => 100],
+
             [['description'], 'string', 'max' => 1000],
             [['image'],'file','skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
@@ -74,6 +76,26 @@ class Product extends \yii\db\ActiveRecord
             return true;
         }else{
             return false;
+        }
+    }
+
+
+    public function validateColors($attribute)
+    {
+        $items = $this->$attribute;
+
+        if (!is_array($items)) {
+            $items = [];
+        }
+
+        foreach ($items as $index => $item) {
+            $validator = new EmailValidator();
+            $error = null;
+            $validator->validate($item, $error);
+            if (!empty($error)) {
+                $key = $attribute . '[' . $index . ']';
+                $this->addError($key, $error);
+            }
         }
     }
 

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\NewUser;
+use app\models\Product;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -143,5 +144,17 @@ class SiteController extends Controller
         return $this->render('register', [
             'model' => $model,
         ]);
+    }
+
+    public function actionProduct()
+    {
+        $products = Product::find()->all();
+        return $this->render('product',[
+            'products'=>$products
+        ]);
+    }
+    public function actionBlog()
+    {
+        return $this->render('blog');
     }
 }

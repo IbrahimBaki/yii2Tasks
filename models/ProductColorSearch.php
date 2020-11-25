@@ -17,8 +17,8 @@ class ProductColorSearch extends ProductColor
     public function rules()
     {
         return [
-            [['id', 'product_id', 'created_by', 'updated_by'], 'integer'],
-            [['color', 'slug'], 'safe'],
+            [['id', 'product_id'], 'integer'],
+            [['color'], 'safe'],
             [['price'], 'number'],
         ];
     }
@@ -65,12 +65,9 @@ class ProductColorSearch extends ProductColor
             'id' => $this->id,
             'product_id' => $this->product_id,
             'price' => $this->price,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'color', $this->color])
-            ->andFilterWhere(['like', 'slug', $this->slug]);
+        $query->andFilterWhere(['like', 'color', $this->color]);
 
         return $dataProvider;
     }

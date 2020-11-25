@@ -4,6 +4,8 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
+/* @var $catList app\models\Category */
+/* @var $prdColor app\models\ProductColor */
 
 $this->title = 'Update Product: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
@@ -17,6 +19,7 @@ $this->params['breadcrumbs'][] = 'Update';
     <?= $this->render('_form', [
         'model' => $model,
         'catList' => $catList,
+        'prdColor' => $prdColor,
     ]) ?>
 
 </div>

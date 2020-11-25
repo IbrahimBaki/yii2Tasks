@@ -3,8 +3,7 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\BlameableBehavior;
-use yii\behaviors\SluggableBehavior;
+
 
 /**
  * This is the model class for table "product_color".
@@ -12,6 +11,7 @@ use yii\behaviors\SluggableBehavior;
  * @property int $id
  * @property int $product_id
  * @property string|null $color
+ * @property string|null $schedule
  * @property float|null $price
  * @property int|null $created_by
  * @property int|null $updated_by
@@ -22,17 +22,6 @@ use yii\behaviors\SluggableBehavior;
 class ProductColor extends \yii\db\ActiveRecord
 {
 
-    public function behaviors()
-    {
-        return [
-            BlameableBehavior::className(),
-            [
-            'class' => SluggableBehavior::className(),
-            'attribute' => 'color',
-            ]
-        ];
-
-    }
     /**
      * {@inheritdoc}
      */
@@ -51,6 +40,7 @@ class ProductColor extends \yii\db\ActiveRecord
             [['product_id'], 'integer'],
             [['price'], 'number'],
             [['color'], 'string', 'max' => 255],
+            [['schedule'], 'safe'],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
         ];
     }
@@ -65,10 +55,12 @@ class ProductColor extends \yii\db\ActiveRecord
             'product_id' => 'Product',
             'color' => 'Color',
             'price' => 'Price',
-            'created_by' => 'Created By',
-            'updated_by' => 'Updated By',
-            'slug' => 'Slug',
         ];
+    }
+
+    public function afterFind() {
+        parent::afterFind();
+        $this->schedule = \yii\helpers\Json::decode($this->schedule);
     }
 
     /**

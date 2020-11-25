@@ -2,6 +2,7 @@
 
 use app\models\Category;
 use kartik\select2\Select2;
+use unclead\multipleinput\MultipleInput;
 use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -10,6 +11,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
 /* @var $catList app\models\Category */
+/* @var $prdColor app\models\ProductColor */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -46,7 +48,7 @@ use yii\widgets\ActiveForm;
             'options' => [
                     'placeholder' => 'Select a Category ...',
                 'options'=>[
-                        3=>['disabled'=>true]
+//                        3=>['disabled'=>true]
                 ]
                 ],
         'pluginOptions' => [
@@ -55,6 +57,33 @@ use yii\widgets\ActiveForm;
     ]) ?>
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($prdColor, 'schedule')->widget(MultipleInput::className(),[
+//            'max'=>6,
+            'columns'=>[
+                    [
+                        'name'=>'color',
+                        'type'=>'dropDownList',
+                        'title' => 'color',
+                        'items' => [
+                            'black' => 'black',
+                            'white' => 'white',
+                            'red' => 'red',
+                            'blue' => 'blue',
+                            'gold' => 'gold',
+                            'silver' => 'silver',
+                        ]
+                    ],
+                    [
+                        'name'=>'price',
+                        'title' => 'price',
+                    ],
+            ],
+            'allowEmptyList'=>false,
+            'enableGuessTitle'=>true,
+            'addButtonPosition'=>MultipleInput::POS_HEADER,
+    ])->label(false) ?>
+
 
     <?= $form->field($model, 'image')->fileInput(['maxlength' => true]) ?>
 
