@@ -16,9 +16,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="product-form">
-
     <?php $form = ActiveForm::begin(); ?>
-
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 <?php /*
     Modal::begin([
@@ -58,11 +56,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($prdColor, 'schedule')->widget(MultipleInput::className(),[
+    <?= $form->field($model, 'options')->widget(MultipleInput::className(),[
 //            'max'=>6,
             'columns'=>[
                     [
-                        'name'=>'color',
+                        'name'=>'color_id',
                         'type'=>'dropDownList',
                         'title' => 'color',
                         'items' => [
@@ -86,7 +84,6 @@ use yii\widgets\ActiveForm;
 
 
     <?= $form->field($model, 'image')->fileInput(['maxlength' => true]) ?>
-
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

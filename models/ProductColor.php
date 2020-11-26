@@ -21,7 +21,6 @@ use Yii;
  */
 class ProductColor extends \yii\db\ActiveRecord
 {
-
     /**
      * {@inheritdoc}
      */
